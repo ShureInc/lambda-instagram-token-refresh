@@ -49,10 +49,8 @@ pipeline {
                 echo 'Upload to S3'
                 doAssumeRoleDefault(awsAccNo[JOB_BASE_NAME], awsJenkinsRole, app_name, region)
                 sh """
-
-                    zip -r lambda.zip .
-
-                    aws s3 sync lambda.zip s3://${bucketName[JOB_BASE_NAME]} --delete --region=us-east-1
+                    zip -r lambda.zip . -x .git
+                    aws s3 cp lambda.zip s3://${bucketName[JOB_BASE_NAME]}/lambda.zip --region=${region}
                 """
                 echo 'Done'
             }
