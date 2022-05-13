@@ -75,5 +75,3 @@ def get_secret():
 
     print("update response: " + response)
 
-
-get_secret()
