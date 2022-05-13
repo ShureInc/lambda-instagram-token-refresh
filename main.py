@@ -13,6 +13,7 @@ def get_secret():
 
     # Create a Secrets Manager client
     session = boto3.session.Session()
+    snsClient = boto3.client('sns')
     client = session.client(
         service_name='secretsmanager',
         region_name=region_name
@@ -74,4 +75,12 @@ def get_secret():
     )
 
     print("update response: " + response)
+    notification = "The Instagram Token was upgraded please restart service" + os.getenv(
+        'APPLICATION_NAME') + "in 48 hr"
+    response = snsClient.publish(
+        TargetArn=os.getenv('SNS_ARN'),
+        Message=json.dumps({'default': notification}),
+        MessageStructure='json'
+    )
+    print("sns response: " + response)
 
