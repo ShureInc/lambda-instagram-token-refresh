@@ -3,7 +3,7 @@ import os
 
 import boto3
 import base64
-import requests
+from botocore.vendored import requests
 from botocore.exceptions import ClientError
 
 
