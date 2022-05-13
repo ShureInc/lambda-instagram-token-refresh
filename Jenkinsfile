@@ -3,7 +3,7 @@ def bucketName = [
         "staging": "use1-web-stg-gms-ppapp-instagram-lambda-s3",
         "dev"    : "use1-web-prod-gms-ppapp-instagram-lambda-s3"
 ]
-def skipStep = (JOB_BASE_NAME != 'main' && JOB_BASE_NAME != 'staging') ? false : true
+def skipStep = (JOB_BASE_NAME != 'main' && JOB_BASE_NAME != 'staging' && JOB_BASE_NAME != 'dev') ? false : true
 def check_sum = ""
 def app_name = "lambda-instagram-token-refresh-${JOB_BASE_NAME}"
 pipeline {
