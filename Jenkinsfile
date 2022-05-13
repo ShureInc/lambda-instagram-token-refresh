@@ -3,6 +3,12 @@ def bucketName = [
         "staging": "use1-web-stg-gms-ppapp-instagram-lambda-s3",
         "dev"    : "use1-web-prod-gms-ppapp-instagram-lambda-s3"
 ]
+def awsAccNo = [
+        "master" : "908685898936",
+        "staging": "142316270592",
+        "dev"    : "625998479255"
+]
+
 def skipStep = (JOB_BASE_NAME != 'main' && JOB_BASE_NAME != 'staging' && JOB_BASE_NAME != 'dev') ? false : true
 def check_sum = ""
 def app_name = "lambda-instagram-token-refresh-${JOB_BASE_NAME}"
