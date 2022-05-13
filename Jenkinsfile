@@ -49,9 +49,8 @@ pipeline {
                 echo 'Upload to S3'
                 doAssumeRoleDefault(awsAccNo[JOB_BASE_NAME], awsJenkinsRole, app_name, region)
                 sh """
-                    cd ../
 
-                    zip -r lambda.zip Shure_lambda-instagram-token-refresh_${JOB_BASE_NAME}
+                    zip -r lambda.zip .
 
                     aws s3 sync lambda.zip s3://${bucketName[JOB_BASE_NAME]} --delete --region=us-east-1
                 """
