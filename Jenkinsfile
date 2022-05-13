@@ -70,7 +70,7 @@ pipeline {
             steps {
 
                 sh """
-                    aws lambda update-function-code --function-name ${lambdaFunctionName[JOB_BASE_NAME]} --s3-bucket ${bucketName[JOB_BASE_NAME]} --s3-key lambda.zip
+                    aws lambda update-function-code --function-name ${lambdaFunctionName[JOB_BASE_NAME]} --s3-bucket ${bucketName[JOB_BASE_NAME]} --s3-key lambda.zip --region ${region}
                 """
                 echo 'Done'
             }
