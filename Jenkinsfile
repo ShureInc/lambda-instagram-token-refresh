@@ -14,6 +14,13 @@ def awsRegion = [
         "dev"    : "us-east-1"
 ]
 
+def lambdaFunctionName = [
+        "master" : "us-east-1-web-prod-gms-ppapp-instagram-token-rotate-lambda",
+        "staging": "us-east-1-web-stg-gms-ppapp-instagram-token-rotate-lambda",
+        "dev"    : "us-east-1-web-dev-gms-ppapp-instagram-token-rotate-lambda"
+]
+
+
 def region = awsRegion[JOB_BASE_NAME]
 def skipStep = (JOB_BASE_NAME != 'main' && JOB_BASE_NAME != 'staging' && JOB_BASE_NAME != 'dev') ? false : true
 def check_sum = ""
@@ -52,6 +59,18 @@ pipeline {
                     rm -rf .git
                     zip -r lambda.zip .
                     aws s3 cp lambda.zip s3://${bucketName[JOB_BASE_NAME]}/lambda.zip --region=${region}
+                """
+                echo 'Done'
+            }
+        }
+        stage('Update Lambda Code') {
+            when {
+                expression { skipStep }
+            }
+            steps {
+
+                sh """
+                    aws lambda update-function-code --function-name ${lambdaFunctionName[JOB_BASE_NAME]} --s3-bucket ${bucketName[JOB_BASE_NAME]} --s3-key lambda.zip
                 """
                 echo 'Done'
             }

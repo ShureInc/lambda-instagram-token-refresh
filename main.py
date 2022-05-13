@@ -75,6 +75,7 @@ def get_secret():
     )
 
     print("update response: " + response)
+    print("Sending Notification")
     notification = "The Instagram Token was upgraded please restart service" + os.getenv(
         'APPLICATION_NAME') + "in 48 hr"
     response = snsClient.publish(
