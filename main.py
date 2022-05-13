@@ -9,7 +9,7 @@ from botocore.exceptions import ClientError
 
 def get_secret():
     secret_name = os.getenv('SECRETS_MANAGER_ARN')
-    region_name = os.getenv('AWS_REGION')
+    region_name = os.getenv('AWS_S3_REGION')
 
     # Create a Secrets Manager client
     session = boto3.session.Session()
