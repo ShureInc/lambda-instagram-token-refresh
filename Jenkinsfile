@@ -1,7 +1,7 @@
 def bucketName = [
-        "master" : "use1-web-dev-gms-ppapp-instagram-lambda-s3",
+        "master" : "use1-web-prod-gms-ppapp-instagram-lambda-s3",
         "staging": "use1-web-stg-gms-ppapp-instagram-lambda-s3",
-        "dev"    : "use1-web-prod-gms-ppapp-instagram-lambda-s3"
+        "dev"    : "use1-web-dev-gms-ppapp-instagram-lambda-s3"
 ]
 def awsAccNo = [
         "master" : "908685898936",
@@ -49,7 +49,8 @@ pipeline {
                 echo 'Upload to S3'
                 doAssumeRoleDefault(awsAccNo[JOB_BASE_NAME], awsJenkinsRole, app_name, region)
                 sh """
-                    zip -r lambda.zip . -x .git
+                    rm -rf .git
+                    zip -r lambda.zip .
                     aws s3 cp lambda.zip s3://${bucketName[JOB_BASE_NAME]}/lambda.zip --region=${region}
                 """
                 echo 'Done'
