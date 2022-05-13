@@ -8,10 +8,17 @@ def awsAccNo = [
         "staging": "142316270592",
         "dev"    : "625998479255"
 ]
+def awsRegion = [
+        "master" : "us-east-1",
+        "staging": "us-east-1",
+        "dev"    : "us-east-1"
+]
 
+def region = awsRegion[JOB_BASE_NAME]
 def skipStep = (JOB_BASE_NAME != 'main' && JOB_BASE_NAME != 'staging' && JOB_BASE_NAME != 'dev') ? false : true
 def check_sum = ""
 def app_name = "lambda-instagram-token-refresh-${JOB_BASE_NAME}"
+def awsJenkinsRole = "shure-gms-jenkins-role"
 pipeline {
     options {
         buildDiscarder(logRotator(numToKeepStr: '5', artifactNumToKeepStr: '5'))
