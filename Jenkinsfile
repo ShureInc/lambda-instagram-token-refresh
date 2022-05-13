@@ -9,7 +9,7 @@ def app_name = "lambda-instagram-token-refresh-${JOB_BASE_NAME}"
 pipeline {
     options {
         buildDiscarder(logRotator(numToKeepStr: '5', artifactNumToKeepStr: '5'))
-        timeout(time: 10, unit: 'MINUTES')
+        timeout(time: 15, unit: 'MINUTES')
         disableConcurrentBuilds abortPrevious: true
     }
     agent {
