@@ -22,7 +22,7 @@ def lambdaFunctionName = [
 
 
 def region = awsRegion[JOB_BASE_NAME]
-def skipStep = (JOB_BASE_NAME != 'main' && JOB_BASE_NAME != 'staging' && JOB_BASE_NAME != 'dev') ? false : true
+def skipStep = (JOB_BASE_NAME != 'master' && JOB_BASE_NAME != 'staging' && JOB_BASE_NAME != 'dev') ? false : true
 def check_sum = ""
 def app_name = "lambda-instagram-token-refresh-${JOB_BASE_NAME}"
 def awsJenkinsRole = "shure-gms-jenkins-role"
