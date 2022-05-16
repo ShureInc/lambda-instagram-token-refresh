@@ -70,9 +70,11 @@ def get_secret(secret_name, region_name):
 def lambda_handler(event, context):
     secret_name = os.getenv('SECRETS_MANAGER_ARN')
     region_name = os.getenv('AWS_S3_REGION')
+    environment = os.getenv('ENVIRONMENT')
+
     notification = "The Instagram Token was upgraded please restart service " + os.getenv(
-        'APPLICATION_NAME') + " in 48 hr"
-    subject = "Instagram Token Rotation "
+        'APPLICATION_NAME') + " in 48 hr in " + environment
+    subject = "[ " + environment + " ] Instagram Token Rotation"
     try:
         snsclient = boto3.client('sns')
 
