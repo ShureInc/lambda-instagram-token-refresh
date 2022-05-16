@@ -87,5 +87,4 @@ def rotate_secret():
 
 
 def lambda_handler(event, lambda_context):
-    print("Event : " + event)
     rotate_secret()
