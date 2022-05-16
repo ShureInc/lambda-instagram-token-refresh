@@ -7,7 +7,7 @@ from botocore.vendored import requests
 from botocore.exceptions import ClientError
 
 
-def get_secret():
+def rotate_secret():
     secret_name = os.getenv('SECRETS_MANAGER_ARN')
     region_name = os.getenv('AWS_S3_REGION')
 
@@ -85,3 +85,7 @@ def get_secret():
     )
     print("sns response: " + response)
 
+
+def lambda_handler(event, lambda_context):
+    print("Event : " + event)
+    rotate_secret()
