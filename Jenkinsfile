@@ -56,8 +56,7 @@ pipeline {
                 echo 'Upload to S3'
                 doAssumeRoleDefault(awsAccNo[JOB_BASE_NAME], awsJenkinsRole, app_name, region)
                 sh """
-                    rm -rf .git
-                    zip -r lambda.zip .
+                    zip -r lambda.zip . -x *.git* role.json
                     aws s3 cp lambda.zip s3://${bucketName[JOB_BASE_NAME]}/lambda.zip --region=${region}
                 """
                 echo 'Done'
