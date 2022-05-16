@@ -100,7 +100,6 @@ def lambda_handler(event, context):
             SecretString='{"IG_ACCESS_TOKEN":"' + new_access_token + '"}',
         )
 
-        print("update response: " + response)
         subject = subject + "Success"
         return response
     except Exception as e:
