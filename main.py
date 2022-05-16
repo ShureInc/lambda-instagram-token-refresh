@@ -13,7 +13,7 @@ def rotate_secret():
 
     # Create a Secrets Manager client
     session = boto3.session.Session()
-    snsClient = boto3.client('sns')
+    snsclient = boto3.client('sns')
     client = session.client(
         service_name='secretsmanager',
         region_name=region_name
@@ -27,6 +27,31 @@ def rotate_secret():
         get_secret_value_response = client.get_secret_value(
             SecretId=secret_name
         )
+        ig_secret_token = json.loads(get_secret_value_response['SecretString'])
+        print("Refreshing Token: " + ig_secret_token['IG_ACCESS_TOKEN'])
+        payload = {'grant_type': 'ig_refresh_token', 'access_token': ig_secret_token['IG_ACCESS_TOKEN']}
+
+        result = requests.get(
+            'https://graph.instagram.com/refresh_access_token?access_token={}', params=payload
+        )
+        data = result.json()
+        print("Generated Token: " + data['access_token'])
+        new_access_token = data['access_token']
+        response = client.update_secret(
+            SecretId=secret_name,
+            SecretString='{"IG_ACCESS_TOKEN":"' + new_access_token + '"}',
+        )
+
+        print("update response: " + response)
+        print("Sending Notification")
+        notification = "The Instagram Token was upgraded please restart service" + os.getenv(
+            'APPLICATION_NAME') + "in 48 hr"
+        response = snsclient.publish(
+            TargetArn=os.getenv('SNS_ARN'),
+            Message=json.dumps({'default': notification}),
+            MessageStructure='json'
+        )
+        print("sns response: " + response)
 
     except ClientError as e:
         if e.response['Error']['Code'] == 'DecryptionFailureException':
@@ -57,33 +82,6 @@ def rotate_secret():
         else:
             decoded_binary_secret = base64.b64decode(get_secret_value_response['SecretBinary'])
 
-    # Your code goes here.
-
-    ig_secret_token = json.loads(get_secret_value_response['SecretString'])
-    print("Refreshing Token: " + ig_secret_token['IG_ACCESS_TOKEN'])
-    payload = {'grant_type': 'ig_refresh_token', 'access_token': ig_secret_token['IG_ACCESS_TOKEN']}
-
-    result = requests.get(
-        'https://graph.instagram.com/refresh_access_token?access_token={}', params=payload
-    )
-    data = result.json()
-    print("Generated Token: " + data['access_token'])
-    new_access_token = data['access_token']
-    response = client.update_secret(
-        SecretId=secret_name,
-        SecretString='{"IG_ACCESS_TOKEN":"' + new_access_token + '"}',
-    )
-
-    print("update response: " + response)
-    print("Sending Notification")
-    notification = "The Instagram Token was upgraded please restart service" + os.getenv(
-        'APPLICATION_NAME') + "in 48 hr"
-    response = snsClient.publish(
-        TargetArn=os.getenv('SNS_ARN'),
-        Message=json.dumps({'default': notification}),
-        MessageStructure='json'
-    )
-    print("sns response: " + response)
 
 
 def lambda_handler(event, lambda_context):
