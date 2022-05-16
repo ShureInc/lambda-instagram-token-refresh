@@ -74,7 +74,7 @@ def lambda_handler(event, context):
 
     notification = "The Instagram Token was upgraded please restart service " + os.getenv(
         'APPLICATION_NAME') + " in 48 hr in " + environment
-    subject = "[ " + environment + " ] Instagram Token Rotation"
+    subject = "[ " + environment + " ] Instagram Token Rotation "
     try:
         snsclient = boto3.client('sns')
 
