@@ -86,7 +86,7 @@ def lambda_handler(event, context):
         payload = {'grant_type': 'ig_refresh_token', 'access_token': ig_secret_token['IG_ACCESS_TOKEN']}
 
         result = requests.get(
-            'https://graph.instagram.com/refresh_access_token?access_token={}', params=payload
+            'https://graph.instagram.com/refresh_access_token', params=payload
         )
         data = result.json()
         print("Generated Token: " + data['access_token'])
