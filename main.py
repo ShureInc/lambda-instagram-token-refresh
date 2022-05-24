@@ -89,21 +89,25 @@ def lambda_handler(event, context):
             'https://graph.instagram.com/refresh_access_token', params=payload
         )
         data = result.json()
-        print("Generated Token: " + data['access_token'])
-        new_access_token = data['access_token']
+        if data['access_token']:
 
-        session = boto3.session.Session()
-        client = session.client(
-            service_name='secretsmanager',
-            region_name=region_name
-        )
-        response = client.update_secret(
-            SecretId=secret_name,
-            SecretString='{"IG_ACCESS_TOKEN":"' + new_access_token + '"}',
-        )
+            print("Generated Token: " + data['access_token'])
+            new_access_token = data['access_token']
 
-        subject = subject + "Success"
-        return response
+            session = boto3.session.Session()
+            client = session.client(
+                service_name='secretsmanager',
+                region_name=region_name
+            )
+            response = client.update_secret(
+                SecretId=secret_name,
+                SecretString='{"IG_ACCESS_TOKEN":"' + new_access_token + '"}',
+            )
+
+            subject = subject + "Success"
+            return response
+        else:
+            print(json.dumps(data))
     except Exception as e:
         print(e)
         notification = "Exception occurred for run " + context.aws_request_id
