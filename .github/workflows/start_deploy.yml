@@ -1,0 +1,37 @@
+name: Start the deployment for the deploy environment
+
+on:
+  push:
+    branches:
+      - dev
+      - staging
+      - master
+
+permissions:
+  id-token: write
+  contents: read
+  
+jobs:
+  start-build-and-deploy-prod:
+    name: Prod
+    if: github.ref == 'refs/heads/main'
+    uses: ./.github/workflows/build_and_deploy.yml
+    with:
+      aws_account_id: 908685898936
+      deploy_target: prod
+
+  start-build-and-deploy-stage:
+    name: Stage
+    if: github.ref == 'refs/heads/staging'
+    uses: ./.github/workflows/build_and_deploy.yml
+    with:
+      aws_account_id: 142316270592
+      deploy_target: stg
+
+  start-build-and-deploy-dev:
+    name: Dev
+    if: github.ref == 'refs/heads/dev'
+    uses: ./.github/workflows/build_and_deploy.yml
+    with:
+      aws_account_id: 625998479255
+      deploy_target: dev
