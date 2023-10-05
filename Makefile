@@ -17,4 +17,4 @@ deploy-lambda:
 	@echo "OK\n"
 	
 .PHONY: ci
-ci: zip-lambda upload-zip-lambda
+ci: zip-lambda upload-zip-lambda deploy-lambda
