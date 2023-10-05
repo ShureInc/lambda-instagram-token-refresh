@@ -34,4 +34,4 @@ jobs:
     - name: Upload Lambda
       id: upload-lambda
       run: |
-        make ci
+        make ci DEPLOY_TARGET=${{ inputs.deploy_target }}
